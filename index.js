@@ -1,13 +1,15 @@
 const express = require("express")
 const http = require("http")
 const axios = require("axios")
+const cors = require("cors");
 
 var fs = require('fs')
 var request = require('request');
 
-const apiport = 3080
+const port = 3080
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app)
 
 // // url example : https://prnt.sc/le6557
@@ -40,7 +42,7 @@ function aplcall(res) {
             }
             console.log(url);
             download(imageurl, 'temp.png', function () {
-                fs.copyFile(__dirname + '/temp.png', __dirname + '/images/' + url.split("prnt.sc/")[1] + '.png', (err) => {
+                fs.copyFile(__dirname + '/temp.png', __dirname + '/images/' + url.split("prnt.sc/")[1] + '.png', (err) => { 
                     if (err) throw err;
                 });
                 res.sendFile(__dirname + '/index.html')
@@ -56,5 +58,6 @@ app.get('/image', (req, res) => {
     res.sendFile(__dirname + '/temp.png')
 })
 
-app.listen(apiport);
-console.log('listening on port', apiport)
+app.listen(port, "0.0.0.0", () => {
+    console.log('listening on port', port)
+});
